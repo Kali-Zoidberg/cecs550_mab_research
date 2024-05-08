@@ -28,5 +28,8 @@ y1=x*x
 y2=2*x
 y3=2/x
 
-plot_multiline_graph("test graph", "x-axis", "y-axis", [("quadratic", x, y1), ("linear", x, y2), ("some otjer thing", x, y3)])
+plot_multiline_graph(title="test graph", xlabel="x-axis", ylabel="y-axis", lines=[
+    ("quadratic", x, y1), 
+    ("linear", x, y2), 
+    ("some otjer thing", x, y3)])
 '''
