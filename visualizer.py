@@ -7,14 +7,14 @@ line_styles = {
     2: ('r', 'D')
 }
 
-def plot_multiline_graph(title, xlabel, ylabel, lines: list) -> None:
+def plot_multiline_graph(title, xlabel, ylabel, lines: dict) -> None:
     # lines contains tuple of legend, x, and y in that order
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
-    for number, line in enumerate(lines):
-        plt.scatter(line[1], line[2], color=line_styles[number][0], marker=line_styles[number][1], label=line[0])
-        plt.plot(line[1], line[2], color=line_styles[number][0])
+    for number, name in enumerate(lines):
+        plt.scatter(lines[name][0], lines[name][1], color=line_styles[number][0], marker=line_styles[number][1], label=name)
+        plt.plot(lines[name][0], lines[name][1], color=line_styles[number][0])
     plt.legend()
     plt.show()
     
@@ -28,8 +28,8 @@ y1=x*x
 y2=2*x
 y3=2/x
 
-plot_multiline_graph(title="test graph", xlabel="x-axis", ylabel="y-axis", lines=[
-    ("quadratic", x, y1), 
-    ("linear", x, y2), 
-    ("some otjer thing", x, y3)])
+plot_multiline_graph(title="test graph", xlabel="x-axis", ylabel="y-axis", lines={
+    "quadratic":(x, y1), 
+    "linear":(x, y2), 
+    "some otjer thing": (x, y3)})
 '''

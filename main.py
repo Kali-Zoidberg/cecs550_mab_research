@@ -24,5 +24,6 @@ if __name__ == '__main__':
     """
     #visualizer.py
     #visualize results
-    visualizer.plot_multiline_graph("some title", results_by_mab)
+    visualizer.plot_multiline_graph("some graph", "x-axis", "y-axis", 
+                                    results_by_mab)
     #save
