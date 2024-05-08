@@ -27,6 +27,8 @@ class LinUCB:
                 np.linalg.inv(self.A[a]), self.b[a]
             ) #theta_a = A_a^-1 * b_a
             theta = theta.reshape(-1, 1)
+            print(context.shape)
+            print(theta.T.shape)
             p[a] = np.dot(theta.T, context) + self.alpha * np.sqrt(
                 np.dot(context.T, np.dot(np.linalg.inv(self.A[a]), context))
             )
