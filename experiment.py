@@ -25,6 +25,7 @@ class Experiment:
             }
 
             for t in range(0, self.timesteps):
+
                 #define bandit and algorithm
                 bandit = Bandit(n_actions, n_features)
 
