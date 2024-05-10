@@ -16,7 +16,7 @@ from .utils import *
 def Load_Wine(model_tail, num_partial, device):
     # assuming the program is run through the same means as the other datasets, data will be written to directory in 
     # wine_preprocess.py the same way as the other datasets.
-    
+    '''
     #assuming we don't drop any data here since there isn't anything irrelevant like user/movie ID
     dataset = fetch_ucirepo(id=186)
 
@@ -41,6 +41,11 @@ def Load_Wine(model_tail, num_partial, device):
     #X0 contains samples with reward 0; X1 with reward 1
     X0 = X[reward0_idx, :]
     X1 = X[reward1_idx, :]
+    '''
+    
+    X0 = np.load('./real_datasets/wine/preprocess/X0_wine.npy')
+    X1 = np.load('./real_datasets/wine/preprocess/X1_wine.npy')
+    
 
     if num_partial > 0:
         X0_len = X0.shape[0]
