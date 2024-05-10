@@ -20,7 +20,10 @@ def save_python_files(checkpoint_dir):
     for file in os.listdir():
         print(file)
         if file.find(".py") != -1:
-            shutil.copyfile(os.path.join(os.getcwd(), file), os.path.join(os.path.join('python',checkpoint_dir), file))
+            print(os.path.join(os.getcwd(), file))
+            print(os.path.join(os.path.join(checkpoint_dir,'python'), file))
+            shutil.copyfile(os.path.join(os.getcwd(), file),
+                            os.path.join(os.path.join(checkpoint_dir,'python'), file))
             #save_file
             pass
     else:
