@@ -12,6 +12,9 @@ from .utils import *
 
 
 def Load_Wine(model_tail, num_partial, device):
+    # assuming the program is run through the same means as the other datasets, data will be written to directory in 
+    # wine_preprocess.py the same way as the other datasets.
+    '''
     data_array = data.to_numpy()
     # fetch dataset
     wine_quality = fetch_ucirepo(id=186)
@@ -29,10 +32,10 @@ def Load_Wine(model_tail, num_partial, device):
     X = np.vstack(X_split)
     reward0_idx = np.where(Y == 0)[0]
     reward1_idx = np.where(Y == 1)[0]
-
-    #Split X0 and X1 by deicsion boundary (i.e. wine is bad quality, <= n)
-    X0 = reward0_idx
-    X1 = reward1_idx
+    '''
+    #X0 contains samples with reward 0; X1 with reward 1
+    X0 = np.load('./real_datasets/wine/preprocess/X0_wine.npy')
+    X1 = np.load('./real_datasets/wine/preprocess/X1_wine.npy')
 
     if num_partial > 0:
         X0_len = X0.shape[0]
@@ -44,7 +47,7 @@ def Load_Wine(model_tail, num_partial, device):
 
     raw_dim = X0.shape[1]
 
-    state_dict = torch.load('./real_models/AE_ml100k_{}.pt'.format(model_tail))
+    state_dict = torch.load('./real_models/AE_wine_{}.pt'.format(model_tail))
     emb_dim = state_dict['decoder.weight'].shape[1]
 
     autoencoder = Autoencoder_BN(raw_dim=raw_dim, emb_dim=emb_dim).to(device)
