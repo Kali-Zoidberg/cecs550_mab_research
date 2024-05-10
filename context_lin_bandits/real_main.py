@@ -25,6 +25,7 @@ if __name__ == "__main__":
     # Run Algorithms
     ENV = ENV_CLASS[args.env](args)
     
+    # ENV.reset() just sets the seed for the Env class
     ENV.reset()
     CLBBF = algorithms.CLBBF(args.T, ENV)
     CLBBF_rewards     = CLBBF.rewards()

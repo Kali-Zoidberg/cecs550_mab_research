@@ -40,11 +40,15 @@ class base_Env:
         self.args = args
         self.device = torch.device(args.device if torch.cuda.is_available() else "cpu")
 
+        # self.d is the embedded dimensions, emb_dim in env_wine.py Load_Wine()
+        # likely used for just the dimensions of a sample in general?
         self.autoencoder, self.X0, self.X1, self.d \
             = load_ftn(model_tail=args.model_tail, num_partial=args.num_partial, device=self.device)
 
+        # self.p is the masking ratio to make some features missing for each sample
         self.p = 1.0 - args.mask_ratio
 
+        # self.K is the number of arms for the MAB. K_max is unused throughout all programs
         self.K, self.K_max = args.K_max, args.K_max
         self.arms = None
         self.reward1_ratio = args.reward1_ratio
@@ -53,6 +57,7 @@ class base_Env:
         self.n1 = int(math.ceil(self.K * self.reward1_ratio))
         self.n0 = int(self.K - self.n1)
 
+        # seems they're just encoding the X's 10000 at a time?
         B = 10000
         X0_stack = []
         for Bidx in range(self.N0 // B + 1):
@@ -60,6 +65,7 @@ class base_Env:
         X1_stack = []
         for Bidx in range(self.N1 // B + 1):
             X1_stack.append(self.encoding(self.X1[Bidx * B: (Bidx + 1) * B, :]).copy())
+
 
         self.X0 = np.vstack(X0_stack)
         self.X1 = np.vstack(X1_stack)
@@ -101,6 +107,7 @@ class base_Env:
 @jit(nopython=True)
 def masking(p, arms_count, x):
     d = x.shape[1]
+    # m is a mask that gets multiplied over x. contains only 1s and 0s.
     m = np.random.binomial(1.0, p, (arms_count, d))
     x = x * m
     return x, m
