@@ -9,7 +9,10 @@ import random
 import utils
 import argparse
 
-dataset_path = './real_datasets/wine'
+from os import path, makedirs
+from pathlib import Path
+
+dataset_path = Path(path.dirname(path.abspath('')))/"real_datasets"/"wine"
 
 if __name__ == "__main__":
 
@@ -18,7 +21,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     seed = args.seed
 
-    X = np.vstack([np.load(dataset_path+'/preprocess/X0_wine.npy'),np.load(dataset_path+'/preprocess/X1_wine.npy')])
+    X = np.vstack([np.load(dataset_path/'preprocess'/'X0_wine.npy'),np.load(dataset_path/'preprocess'/'X1_wine.npy')])
     np.random.shuffle(X)
 
     model = utils.AE_train(X, seed=seed)
