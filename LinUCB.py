@@ -31,18 +31,14 @@ class linucb_disjoint_arm():
         # theta is (d x 1) dimension vector
         self.theta = np.dot(A_inv, self.b)
 
-        # Reshape covariates input into (d x 1) shape vector
-        x = x_array.reshape([-1, 1])
 
         # Find ucb based on p formulation (mean + std_dev)
         # p is (1 x 1) dimension vector
-        p = np.dot(self.theta.T, x) + self.alpha * np.sqrt(np.dot(x.T, np.dot(A_inv, x)))
+        p = np.dot(self.theta.T, x_array) + self.alpha * np.sqrt(np.dot(x_array.T, np.dot(A_inv, x_array)))
 
         return p
 
-    def reward_update(self, reward, x_array):
-        # Reshape covariates input into (d x 1) shape vector
-        x = x_array.reshape([-1, 1])
+    def reward_update(self, reward, x):
 
         # Update A which is (d * d) matrix.
         self.A += np.dot(x, x.T)
@@ -68,7 +64,7 @@ class linucb_policy():
             # Calculate ucb based on each arm using current covariates at time t
             arm_ucb = self.linucb_arms[arm_index].calc_UCB(x_array)
 
-            # If current arm is highest than current highest_ucb
+            # If current arm is higher than current highest_ucb
             if arm_ucb > highest_ucb:
                 # Set new max ucb
                 highest_ucb = arm_ucb
@@ -84,6 +80,7 @@ class linucb_policy():
         chosen_arm = np.random.choice(candidate_arms)
 
         return chosen_arm
+
 class LinUCB:
     """
     See https://hackernoon.com/contextual-multi-armed-bandit-problems-in-reinforcement-learnings
