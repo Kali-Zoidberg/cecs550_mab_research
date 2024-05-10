@@ -3,7 +3,7 @@ import json
 
 __all__ = ['parse_args']
 
-ENV_LIST = ['ml100k', 'avazu', 'taobao']
+ENV_LIST = ['ml100k', 'avazu', 'taobao', 'wine']
 
 def parse_args(parser):
     parser.add_argument("--env", choices=ENV_LIST, type=str)
