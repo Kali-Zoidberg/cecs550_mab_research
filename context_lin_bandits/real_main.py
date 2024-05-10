@@ -13,7 +13,8 @@ import os
 ENV_CLASS = {
     'ml100k':     real_environments.env_ml100k.ml100k_Env,
     'avazu':      real_environments.env_avazu.avazu_Env,
-    'taobao':     real_environments.env_taobao.taobao_Env
+    'taobao':     real_environments.env_taobao.taobao_Env,
+    'wine':       real_environments.env_wine.wine_Env
 }
 
 if __name__ == "__main__":
