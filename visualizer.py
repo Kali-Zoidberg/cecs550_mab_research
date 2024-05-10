@@ -8,7 +8,7 @@ line_styles = {
 }
 
 def plot_multiline_graph(title, xlabel, ylabel, lines: dict) -> None:
-    # lines contains tuple of legend, x, and y in that order
+    # lines is dict with key of algorithm name, and value of x and y in that order
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
