@@ -29,7 +29,7 @@ user['agegroup'] = pd.cut(user['age'], bins, labels=names)
 user = user.drop(["age"], axis = 1)
 
 columnsToEncode = ["agegroup","gender","occupation"]
-myEncoder = OneHotEncoder(sparse=False, handle_unknown='ignore')
+myEncoder = OneHotEncoder(sparse_output=False, handle_unknown='ignore')
 myEncoder.fit(user[columnsToEncode])
 
 user_features = pd.concat([user.drop(columnsToEncode, 1),
@@ -68,7 +68,8 @@ X = []
 for i in range(data_array.shape[0]):
     user_id = data_array[i,0]
     movie_id= data_array[i,1]
-    
+    if i == 0:
+        print(np.concatenate((user_id_to_feature[user_id], movie_id_to_feature[movie_id])).copy().shape)
     X.append(np.concatenate((user_id_to_feature[user_id], movie_id_to_feature[movie_id])).copy())
 X = np.vstack(X)
 
@@ -76,5 +77,5 @@ X = np.vstack(X)
 reward0_idx = np.where(Y == 0)[0]
 reward1_idx = np.where(Y == 1)[0]
 
-np.save(dataset_path+'/preprocess/X0_ml100k',X[reward0_idx,:])
-np.save(dataset_path+'/preprocess/X1_ml100k',X[reward1_idx,:])
+# np.save(dataset_path+'/preprocess/X0_ml100k',X[reward0_idx,:])
+# np.save(dataset_path+'/preprocess/X1_ml100k',X[reward1_idx,:])

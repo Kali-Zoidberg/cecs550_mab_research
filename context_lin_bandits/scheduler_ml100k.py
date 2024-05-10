@@ -9,11 +9,11 @@ now = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
 seed_list = [12345, 23456, 34567, 45678, 56789, 67890, 78901, 89012, 90123, 1234]
 base_arg = ' --T 100000 --env ml100k --resultfoldertail _ctr_ml100k_{} '.format(now)
 
-if os.path.exists('./real_datasets/ml100k/preprocess/X0_ml100k.npy'):
-    print('Skip Preprocessing')
-else:
-    print('Preprocess')
-    os.system("python ./real_preprocess/ml100k_preprocess.py")
+# if os.path.exists('./real_datasets/ml100k/preprocess/X0_ml100k.npy'):
+#     print('Skip Preprocessing')
+# else:
+print('Preprocess')
+os.system("python ./real_preprocess/ml100k_preprocess.py")
 
 for seed in seed_list:
     if os.path.exists('./real_models/AE_ml100k_s{}.pt'.format(seed)):

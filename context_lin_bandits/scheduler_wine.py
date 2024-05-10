@@ -12,17 +12,17 @@ if os.path.exists('./real_datasets/wine/preprocess/X0_wine.npy'):
     print('Skip Preprocessing')
 else:
     print('Preprocess')
-    os.system("python3 ./real_preprocess/wine_preprocess.py")
+    os.system("python ./real_preprocess/wine_preprocess.py")
 
 for seed in seed_list:
     if os.path.exists('./real_models/AE_wine_s{}.pt'.format(seed)):
         print('Skip Training Autoencoder')
     else:
         print('Train Autoencoder')
-        os.system(f"python3 ./real_preprocess/wine_aetrain.py --seed {seed}")
+        os.system(f"python ./real_preprocess/wine_aetrain.py --seed {seed}")
 
     print('Run Contextual Linear Bandit Algorithms - Seed: {}'.format(seed))
     condition_arg = f'--seed {seed} --model_tail s{str(seed)}'
-    os.system('python3 ./real_main.py'+ base_arg + condition_arg)
+    os.system('python ./real_main.py'+ base_arg + condition_arg)
 
 real_plotting.plotting(resultfoldertail='_ctr_wine_{}'.format(now), env='wine', plotting_dict=plotting_dict, fnametail='_{}_all'.format(now))
