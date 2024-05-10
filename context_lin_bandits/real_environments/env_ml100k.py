@@ -15,6 +15,7 @@ def Load_ML100k(model_tail, num_partial, device):
     X0 = np.load('./real_datasets/ml100k/preprocess/X0_ml100k.npy')
     X1 = np.load('./real_datasets/ml100k/preprocess/X1_ml100k.npy')
 
+    # num_partial > 0 means that that X0 and X1 are truncated to num_partial randomly selected samples each
     if num_partial > 0:
         X0_len = X0.shape[0]
         X1_len = X1.shape[0]

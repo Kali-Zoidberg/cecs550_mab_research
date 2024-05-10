@@ -17,6 +17,7 @@ print('# of Cores: {}'.format(num_cores))
 
 dataset_path = "./real_datasets/ml100k"
 
+# this whole section is just preparing the user and movie dataframes
 user = pd.read_csv(dataset_path+"/raw/ml-100k/u.user", header = None, sep = "|")
 user.columns = ["user_id","age","gender","occupation","zipcode"]
 user = user.drop(["zipcode"], axis = 1)
@@ -51,6 +52,7 @@ movie_id_to_feature = dict(zip(movie_features_array[:,0], movie_features_array[:
 data = pd.read_csv(dataset_path+"/raw/ml-100k/u.data", sep ="\t", header=None, names = ["user_id", "movie_id","rating", "timestamp"])
 data = data.drop(["timestamp"], axis = 1)
 
+# reward criteria is set here. they replaced the rating column with bandit reward
 data["reward"] = np.where(data["rating"] < 5,0,1)
 data.pop("rating")
 data = data.reset_index(drop = True)
@@ -60,6 +62,9 @@ data_array = data.to_numpy()
 Y = data_array[:,2]
 
 X = []
+
+# u.data contains the user id and movie id for each review;
+# they concatenated the user and movie info for each review here
 for i in range(data_array.shape[0]):
     user_id = data_array[i,0]
     movie_id= data_array[i,1]
@@ -67,6 +72,7 @@ for i in range(data_array.shape[0]):
     X.append(np.concatenate((user_id_to_feature[user_id], movie_id_to_feature[movie_id])).copy())
 X = np.vstack(X)
 
+# dataset is split by reward
 reward0_idx = np.where(Y == 0)[0]
 reward1_idx = np.where(Y == 1)[0]
 
