@@ -21,7 +21,8 @@ if __name__ == "__main__":
     X = np.vstack([np.load(dataset_path+'/preprocess/X0_wine.npy'),np.load(dataset_path+'/preprocess/X1_wine.npy')])
     np.random.shuffle(X)
 
-    model = utils.AE_train(X, seed=seed)
+    #skipping AutoEncoder for now
+    #model = utils.AE_train(X, seed=seed)
 
-    torch.save(model.state_dict(), f'./real_models/AE_wine_s{seed}.pt')
+    #torch.save(model.state_dict(), f'./real_models/AE_wine_s{seed}.pt')
 

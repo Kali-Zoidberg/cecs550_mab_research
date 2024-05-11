@@ -12,8 +12,7 @@ dataset_path = "./real_datasets/wine"
 dataset = fetch_ucirepo(id=186)
 
 data = pd.concat((dataset.data.features, dataset.data.targets), axis=1)
-print(dataset.data.features)
-print(data.shape)
+
 #for each sample, we set reward to 0 if quality <= 5, otherwise 1
 #We will drop the quality attribute so Bandit doesn't know about it, can only see reward.
 data["reward"] = np.where(data["quality"] <= 5, 0, 1)
@@ -38,7 +37,7 @@ reward1_idx = np.where(Y == 1)[0]
 
 #Splitting the data in two ways: wine that is <= 5 and >= 5 and then saving them into two separate files
 assert( (X[reward0_idx, :].shape[0] + X[reward1_idx].shape[0]) == data_array.shape[0])
-#Ensure we have only X dimensions
-assert(X[reward0_idx, :].shape[0][1] == dataset.data.features.shape[1])
+#Ensure we have kept the x features dimensions
+assert(X[reward0_idx, :].shape[1] == data_array.shape[1])
 np.save(dataset_path + '/preprocess/X0_wine', X[reward0_idx, :])
 np.save(dataset_path + '/preprocess/X1_wine', X[reward1_idx, :])

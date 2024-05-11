@@ -40,7 +40,9 @@ class base_Env:
         self.args = args
         self.device = torch.device(args.device if torch.cuda.is_available() else "cpu")
 
-        self.autoencoder, self.X0, self.X1, self.d \
+        #self.autoencoder,\
+        self.X0, self.X1,\
+                self.d \
             = load_ftn(model_tail=args.model_tail, num_partial=args.num_partial, device=self.device)
 
         self.p = 1.0 - args.mask_ratio
@@ -67,7 +69,7 @@ class base_Env:
     def encoding(self, x):
         with torch.no_grad():
             _x = torch.from_numpy(x).type(torch.FloatTensor).to(self.device)
-            _x = self.autoencoder.encoding_result(_x)
+            #_x = self.autoencoder.encoding_result(_x)
             x = _x.cpu().numpy()
         return x
 

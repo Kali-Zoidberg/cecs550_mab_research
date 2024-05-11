@@ -23,6 +23,7 @@ for seed in seed_list:
 
     print('Run Contextual Linear Bandit Algorithms - Seed: {}'.format(seed))
     condition_arg = f'--seed {seed} --model_tail s{str(seed)}'
+    #Replace with normal function behavior.
     os.system('python ./real_main.py'+ base_arg + condition_arg)
 
 real_plotting.plotting(resultfoldertail='_ctr_wine_{}'.format(now), env='wine', plotting_dict=plotting_dict, fnametail='_{}_all'.format(now))
