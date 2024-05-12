@@ -15,12 +15,13 @@ else:
     os.system("python ./real_preprocess/wine_preprocess.py")
 
 for seed in seed_list:
+    '''
     if os.path.exists('./real_models/AE_wine_s{}.pt'.format(seed)):
         print('Skip Training Autoencoder')
     else:
         print('Train Autoencoder')
         os.system(f"python ./real_preprocess/wine_aetrain.py --seed {seed}")
-
+    '''
     print('Run Contextual Linear Bandit Algorithms - Seed: {}'.format(seed))
     condition_arg = f'--seed {seed} --model_tail s{str(seed)}'
     #Replace with normal function behavior.

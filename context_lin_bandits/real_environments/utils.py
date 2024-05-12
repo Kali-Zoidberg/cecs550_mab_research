@@ -40,7 +40,7 @@ class base_Env:
         self.args = args
         self.device = torch.device(args.device if torch.cuda.is_available() else "cpu")
 
-        self.autoencoder,\
+        #self.autoencoder,\
         self.X0, self.X1,\
                 self.d \
             = load_ftn(model_tail=args.model_tail, num_partial=args.num_partial, device=self.device)
@@ -58,6 +58,7 @@ class base_Env:
         self.n0 = int(self.K - self.n1)
 
         # seems they're just encoding the X's 10000 at a time?
+        '''
         B = 10000
         X0_stack = []
         for Bidx in range(self.N0 // B + 1):
@@ -65,15 +66,16 @@ class base_Env:
         X1_stack = []
         for Bidx in range(self.N1 // B + 1):
             X1_stack.append(self.encoding(self.X1[Bidx * B: (Bidx + 1) * B, :]).copy())
-
+        
 
         self.X0 = np.vstack(X0_stack)
         self.X1 = np.vstack(X1_stack)
+        '''
 
     def encoding(self, x):
         with torch.no_grad():
             _x = torch.from_numpy(x).type(torch.FloatTensor).to(self.device)
-            _x = self.autoencoder.encoding_result(_x)
+            #_x = self.autoencoder.encoding_result(_x)
             x = _x.cpu().numpy()
         return x
 
