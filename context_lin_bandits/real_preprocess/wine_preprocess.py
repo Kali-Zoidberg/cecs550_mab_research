@@ -15,7 +15,7 @@ data = pd.concat((dataset.data.features, dataset.data.targets), axis=1)
 
 #for each sample, we set reward to 0 if quality <= 5, otherwise 1
 #We will drop the quality attribute so Bandit doesn't know about it, can only see reward.
-data["reward"] = np.where(data["quality"] <= 5, 0, 1)
+data["reward"] = np.where(data["quality"] <= 7, 0, 1)
 data.pop("quality")
 data = data.reset_index(drop=True)
 data_array = data.to_numpy()
@@ -34,7 +34,8 @@ for i in range(data_array.shape[0]):
 X = np.vstack(X)
 reward0_idx = np.where(Y == 0)[0]
 reward1_idx = np.where(Y == 1)[0]
-
+print(reward0_idx.shape)
+print(reward1_idx.shape)
 #Splitting the data in two ways: wine that is <= 5 and >= 5 and then saving them into two separate files
 assert( (X[reward0_idx, :].shape[0] + X[reward1_idx].shape[0]) == data_array.shape[0])
 #Ensure we have kept the x features dimensions

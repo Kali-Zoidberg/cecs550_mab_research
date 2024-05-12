@@ -12,7 +12,7 @@ import argparse
 learning_rate = 0.00001
 weight_decay  = 0.000001
 num_epoch = 500
-B = 10000
+B = 1000
 EMB_DIM = 32
 
 __all__ = ["AE_train"]
