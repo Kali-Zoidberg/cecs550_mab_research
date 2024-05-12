@@ -25,7 +25,7 @@ def Load_ML100k(model_tail, num_partial, device):
         X1 = X1[reward1_idxs]
 
     raw_dim = X0.shape[1]
-
+    '''
     state_dict = torch.load('./real_models/AE_ml100k_{}.pt'.format(model_tail))
     emb_dim = state_dict['decoder.weight'].shape[1]
 
@@ -33,7 +33,9 @@ def Load_ML100k(model_tail, num_partial, device):
 
     autoencoder.load_state_dict(state_dict)
     autoencoder.eval()
-    return autoencoder, X0, X1, emb_dim
+    '''
+    emb_dim = raw_dim
+    return X0, X1, emb_dim
 
 
 class ml100k_Env(base_Env):

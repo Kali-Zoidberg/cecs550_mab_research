@@ -8,6 +8,7 @@ import random
 
 import utils
 import argparse
+from os import mkdir
 
 dataset_path = './real_datasets/ml100k'
 
@@ -22,6 +23,8 @@ if __name__ == "__main__":
     np.random.shuffle(X)
 
     model = utils.AE_train(X, seed=seed)
+
+    mkdir('./real_models/', exist_ok=True)
 
     torch.save(model.state_dict(), f'./real_models/AE_ml100k_s{seed}.pt')
 
