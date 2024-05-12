@@ -25,7 +25,7 @@ if __name__ == "__main__":
     np.random.shuffle(X)
 
     #skipping AutoEncoder for now
-    model = utils.AE_train(X, seed=seed)
+    model = utils.AE_train(X, emb_dim=10, seed=seed) #set to 10, see what happens
 
     torch.save(model.state_dict(), f'./real_models/AE_wine_s{seed}.pt')
 
