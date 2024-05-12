@@ -42,7 +42,7 @@ for resultfoldertail in folders:
 
     T = len(CLBBF_ctr)
 
-    indxs = np.arange(12499, T, step=12500)
+    indxs = np.arange(11111, T, step=11111)
     
     data = pd.DataFrame(data=np.vstack((indxs, CLBBF_avg[indxs], OFUL_avg[indxs])), index=["t", "CLBBF", "OFUL"])
 
