@@ -77,5 +77,5 @@ X = np.vstack(X)
 reward0_idx = np.where(Y == 0)[0]
 reward1_idx = np.where(Y == 1)[0]
 
-# np.save(dataset_path+'/preprocess/X0_ml100k',X[reward0_idx,:])
-# np.save(dataset_path+'/preprocess/X1_ml100k',X[reward1_idx,:])
+np.save(dataset_path+'/preprocess/X0_ml100k',X[reward0_idx,:])
+np.save(dataset_path+'/preprocess/X1_ml100k',X[reward1_idx,:])

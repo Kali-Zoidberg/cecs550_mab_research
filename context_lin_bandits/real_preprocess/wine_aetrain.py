@@ -12,7 +12,7 @@ import argparse
 from os import path, makedirs
 from pathlib import Path
 
-dataset_path = Path(path.dirname(path.abspath('')))/"real_datasets"/"wine"
+dataset_path = "./real_datasets/wine"
 
 if __name__ == "__main__":
 
@@ -21,11 +21,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
     seed = args.seed
 
-    X = np.vstack([np.load(dataset_path/'preprocess'/'X0_wine.npy'),np.load(dataset_path/'preprocess'/'X1_wine.npy')])
+    X = np.vstack([np.load(dataset_path+'/preprocess/X0_wine.npy'),np.load(dataset_path+'/preprocess/X1_wine.npy')])
     np.random.shuffle(X)
 
     #skipping AutoEncoder for now
-    #model = utils.AE_train(X, seed=seed)
+    model = utils.AE_train(X, emb_dim=10, seed=seed) #set to 10, see what happens
 
-    #torch.save(model.state_dict(), f'./real_models/AE_wine_s{seed}.pt')
+    torch.save(model.state_dict(), f'./real_models/AE_wine_s{seed}.pt')
 

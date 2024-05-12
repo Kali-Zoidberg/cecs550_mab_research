@@ -51,8 +51,8 @@ def plotting(resultfoldertail, env, plotting_dict):
     OFUL_avg  = np.mean(OFUL_ctrs, axis=0)
     OFUL_std  = np.std(OFUL_ctrs, axis=0)
 
-    RANDOM_avg= np.mean(RANDOM_ctrs, axis=0)
-    RANDOM_std= np.std(RANDOM_ctrs, axis=0)
+    RANDOM_avg = np.mean(RANDOM_ctrs, axis=0)
+    RANDOM_std = np.std(RANDOM_ctrs, axis=0)
     
     ###################################################################################################
     
@@ -81,8 +81,8 @@ def plotting(resultfoldertail, env, plotting_dict):
 
     ax.set_ylim(y_lim)
 
-    ax.set_xlabel(r'Time step $t$',fontsize=25)
-    ax.set_ylabel('CTR',fontsize=25)
+    ax.set_xlabel(r'Time step $t$', fontsize=25)
+    ax.set_ylabel('CTR', fontsize=25)
     ax.tick_params(axis='both', which='major', labelsize=22)
 
     ax.ticklabel_format(style='sci', axis='x', scilimits=(0,0))
@@ -100,10 +100,12 @@ def plotting(resultfoldertail, env, plotting_dict):
     fig.subplots_adjust(bottom=0.17)
 
     fig.tight_layout()
+
     if cut > 0:
         cut = f'_cut{cut}'
     else:
         cut = ''
+
     fig.savefig(f'./result{resultfoldertail}/{env}{cut}.png',dpi=300)
     
     
