@@ -36,7 +36,7 @@ reward0_idx = np.where(Y == 0)[0]
 reward1_idx = np.where(Y == 1)[0]
 print(reward0_idx.shape)
 print(reward1_idx.shape)
-#Splitting the data in two ways: wine that is <= 5 and >= 5 and then saving them into two separate files
+#Splitting the data in two ways: wine that is <= 7 and > 7 and then saving them into two separate files
 assert( (X[reward0_idx, :].shape[0] + X[reward1_idx].shape[0]) == data_array.shape[0])
 #Ensure we have kept the x features dimensions
 assert(X[reward0_idx, :].shape[1] == data_array.shape[1])
