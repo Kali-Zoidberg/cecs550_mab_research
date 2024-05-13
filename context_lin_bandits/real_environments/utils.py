@@ -84,7 +84,7 @@ class base_Env:
 
         self.x = np.vstack([self.X0[reward0_idxs].copy(), self.X1[reward1_idxs].copy()])
         self.arms = np.arange(self.K)
-
+        # Env.x is the masked samples, Env.m is the mask
         self.x, self.m = masking(self.p, len(self.arms), self.x)
 
     def write_used_idx(self):
