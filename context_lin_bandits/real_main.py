@@ -1,4 +1,4 @@
-import numpy as np
+import cupy as np
 import argparse, json, pickle, math
 import matplotlib.pyplot as plt
 import time

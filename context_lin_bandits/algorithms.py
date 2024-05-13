@@ -5,6 +5,7 @@ from tqdm import tqdm
 from numpy.random import seed
 from numpy.random import rand
 from numba import jit, prange
+import cupy as cp
 
 @jit(nopython=True)
 def numba_ix(arr, rows, cols):
@@ -109,79 +110,81 @@ class CLBBF:
         self.d  = self.Env.d
         self.K = self.Env.K
         
-        self.r = np.zeros(T,float)
-        self.r_Exp = np.zeros(T,float)
+        self.r = cp.zeros(T,float)
+        self.r_Exp = cp.zeros(T,float)
         
         self.n = 0
-        self.Z  = np.zeros((self.d,self.d))
-        self.xi = np.zeros(self.d)
+        self.Z  = cp.asarray(np.zeros((self.d,self.d)))
+        self.xi = cp.asarray(np.zeros(self.d))
         
-        self.V = (self.d+1) * math.log(self.K * T) * np.identity(self.d+1)
-        self.xy = np.zeros(self.d+1)
+        self.V = (self.d+1) * math.log(self.K * T) * cp.identity(self.d+1)
+        self.xy = cp.zeros(self.d+1)
         
         self.x_his = []
         self.m_his = []
         
         self.run()
         self.x_sum=0
-        
+
     def run(self):
         
         for t in tqdm(range(self.T)):
 
             self.Env.load_data()
-            x_t = self.Env.x.copy()
-            m_t = self.Env.m.copy()
+            x_t = cp.asarray(self.Env.x.copy())
+            m_t = cp.asarray(self.Env.m.copy())
             
             for k in range(self.K):
-                self.n += np.sum(m_t[k])
-                self.Z += np.outer(x_t[k],x_t[k])
+                self.n += cp.sum(m_t[k])
+                self.Z += cp.outer(x_t[k],x_t[k])
                 self.xi+= x_t[k]
 
-            self.p_hat, self.nu_hat, self.Sigma_hat = _CLBEF_get_estimators(self.d, self.K, x_t,m_t, self.K*(t+1), self.xi, self.n, self.Z)
-            self.x_hat = self._x_hats(x_t, m_t)
+            self.p_hat, self.nu_hat, self.Sigma_hat = _CLBEF_get_estimators(self.d, self.K, cp.asnumpy(x_t),cp.asnumpy(m_t), self.K*(t+1), cp.asnumpy(self.xi), int(self.n), cp.asnumpy(self.Z))
+            self.nu_hat = cp.asarray(self.nu_hat)
+            self.Sigma_hat = cp.asarray(self.Sigma_hat)
+            self.x_hat = cp.asarray(self._x_hats(cp.asnumpy(x_t), cp.asnumpy(m_t)))
 
             if t == 0:
                 chosen_arm = np.random.choice(self.K)
             else:
                 if is_power_of_two(t):
-                    self.V = (self.d+1) * math.log(self.Env.K * self.T) * np.identity(self.d+1)
-                    self.xy = np.zeros(self.d+1)
+                    self.V = (self.d+1) * math.log(self.Env.K * self.T) * cp.identity(self.d+1)
+                    self.xy = cp.zeros(self.d+1)
                     self.x_sum=0
                     for s in range(t):
                         x = self.x_his[s]
                         m = self.m_his[s]
-                        x_hat = np.insert(self._x_bars(x,m), 0, 1)
-                        self.V  += np.outer(x_hat,x_hat)
+                        x_hat = cp.append([1], cp.asarray(self._x_bars(cp.asnumpy(x),cp.asnumpy(m))))
+                        self.V  += cp.outer(x_hat,x_hat)
                         self.xy += x_hat * self.r[s]
-                    self.V_inv = np.linalg.pinv(self.V)
+                    self.V_inv = cp.linalg.pinv(self.V)
                     
                     for s in range(t):
                         x = self.x_his[s]
                         m = self.m_his[s]
-                        x_hat = np.insert(self._x_bars(x,m), 0, 1)
-                        self.x_sum+= np.sqrt(x_hat@self.V_inv@x_hat)
+                        x_hat = cp.append([1], cp.asarray(self._x_bars(cp.asnumpy(x),cp.asnumpy(m))))
+                        self.x_sum+= cp.sqrt(x_hat@self.V_inv@x_hat)
                         
-                self.V_inv = np.linalg.pinv(self.V)
+                self.V_inv = cp.linalg.pinv(self.V)
                 
                 self.theta_hat = self.V_inv @ self.xy.T
-                chosen_arm, max_ucb = _CLBEF_UCB(self.x_hat, t, self.K, self.theta_hat, self.d, self.T, self.V_inv, self.p_hat, self.x_sum)
+                chosen_arm, max_ucb = _CLBEF_UCB(cp.asnumpy(self.x_hat), t, self.K, cp.asnumpy(self.theta_hat), self.d, self.T, cp.asnumpy(self.V_inv), self.p_hat, cp.asnumpy(self.x_sum))
                     
             self.r_Exp[t], self.r[t] = self.Env.observe(chosen_arm)
             self.x_his.append(x_t[chosen_arm])
             self.m_his.append(m_t[chosen_arm])
             
-            self.V  += np.outer(self.x_hat[chosen_arm],self.x_hat[chosen_arm])
-            self.xy += self.x_hat[chosen_arm] * self.r[t]            
+            self.V  += cp.outer(self.x_hat[chosen_arm],self.x_hat[chosen_arm])
+            self.xy += self.x_hat[chosen_arm] * cp.asarray(self.r[t])
                     
     def _x_bars(self, x, m):
         x_bar_dummy = np.zeros(self.d)
-        return _CLBEF_x_bars(self.nu_hat, self.Sigma_hat, x, m, x_bar_dummy)
+        return _CLBEF_x_bars(cp.asnumpy(self.nu_hat), cp.asnumpy(self.Sigma_hat), x, m, x_bar_dummy)
     
     def _x_hats(self, x, m):
         x_hat_dummy = np.ones((self.K,self.d+1))
         x_bar_dummy = np.zeros((self.K,self.d))
-        return _CLBEF_x_hats(self.nu_hat, self.Sigma_hat, x, m, self.K, x_bar_dummy, x_hat_dummy)
+        return _CLBEF_x_hats(cp.asnumpy(self.nu_hat), cp.asnumpy(self.Sigma_hat), x, m, self.K, x_bar_dummy, x_hat_dummy)
     
     def rewards(self):
         return self.r_Exp  
@@ -223,7 +226,7 @@ class OFUL:
         
         self.V = (self.d+1)*math.log(self.K*T)*np.identity(self.d+1)
         self.y = np.zeros(self.d+1)
-        self.x_hat = np.ones((self.K,self.d+1))
+        self.x_hat = cp.ones((self.K,self.d+1))
         
         self.run()
 
@@ -232,7 +235,7 @@ class OFUL:
         for t in tqdm(range(self.T)):
 
             self.Env.load_data()
-            x_t = self.Env.x.copy()
+            x_t = cp.asnumpy(self.Env.x.copy())
             self.x_hat[:,1:] = x_t
                 
             if t == 0:
@@ -287,4 +290,4 @@ class RandomPolicy:
             self.r_Exp[t],self.r[t] = self.Env.observe(chosen_arm)
             
     def rewards(self):
-        return self.r_Exp 
+        return self.r_Exp

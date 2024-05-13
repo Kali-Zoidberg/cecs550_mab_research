@@ -106,7 +106,7 @@ class base_Env:
         np.random.seed(self.seed)
 
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def masking(p, arms_count, x):
     d = x.shape[1]
     # m is a mask that gets multiplied over x. contains only 1s and 0s.
