@@ -13,6 +13,8 @@ from os import path, makedirs
 from pathlib import Path
 
 dataset_path = Path("./real_datasets/wine")
+# change this variable to change the output size of the autoencoder's encoding layer
+NUM_EMB_DIM = 7
 
 if __name__ == "__main__":
 
@@ -25,7 +27,7 @@ if __name__ == "__main__":
     np.random.shuffle(X)
 
     #skipping AutoEncoder for now
-    model = utils.AE_train(X, emb_dim=7, seed=seed) #set to 10, see what happens
+    model = utils.AE_train(X, emb_dim=NUM_EMB_DIM, seed=seed) #set to 10, see what happens
     model_path = Path('./real_models/')
     makedirs(model_path, exist_ok=True)
     torch.save(model.state_dict(), model_path/f'AE_wine_s{seed}.pt')
