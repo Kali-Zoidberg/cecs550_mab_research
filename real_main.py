@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import time
 import torch
 
-import real_environments.env_ml100k, real_environments.env_avazu, real_environments.env_taobao, real_environments.env_wine
+import real_environments.env_ml100k, real_environments.env_wine
 import algorithms
 
 import utils
