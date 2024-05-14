@@ -14,35 +14,6 @@ from .utils import *
 
 
 def Load_Wine(model_tail, num_partial, device):
-    # assuming the program is run through the same means as the other datasets, data will be written to directory in 
-    # wine_preprocess.py the same way as the other datasets.
-    '''
-    #assuming we don't drop any data here since there isn't anything irrelevant like user/movie ID
-    dataset = fetch_ucirepo(id=186)
-
-    data = pd.concat((dataset.data.features, dataset.data.targets), axis=1)
-
-    #for each sample, we set reward to 0 if quality < 5, otherwise 1
-    data["reward"] = np.where(data["quality"] < 5, 0, 1)
-    data.pop("quality")
-    data = data.reset_index(drop=True)
-
-    data_array = data.to_numpy()
-
-    #get the rewards as a separate vector
-    #dataframe is 11 attributes then the reward, so get idx 11
-    Y = data_array[:, 11]
-
-    X = data_array[:, :11]
-
-    reward0_idx = np.where(Y == 0)[0]
-    reward1_idx = np.where(Y == 1)[0]
-
-    #X0 contains samples with reward 0; X1 with reward 1
-    X0 = X[reward0_idx, :]
-    X1 = X[reward1_idx, :]
-    '''
-    
     X0 = np.load('./real_datasets/wine/preprocess/X0_wine.npy')
     X1 = np.load('./real_datasets/wine/preprocess/X1_wine.npy')
     
