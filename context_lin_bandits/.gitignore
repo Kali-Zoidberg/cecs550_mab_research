@@ -1,8 +1,0 @@
-real_models/
-real_outputs/
-**/*.ipynb_checkpoints/
-.ipynb_checkpoints
-__pycache__
-
-*.pyc
-
