@@ -2,6 +2,7 @@ poetry.lock
 checkpoints/*
 .idea/*
 __pycache__/*
+*/__pycache__/*
 real_environments/__pycache__
 real_models/*
 real_outputs/*
