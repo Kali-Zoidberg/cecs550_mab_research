@@ -17,7 +17,7 @@ def Load_Wine(model_tail, num_partial, device):
     X0 = np.load('./real_datasets/wine/preprocess/X0_wine.npy')
     X1 = np.load('./real_datasets/wine/preprocess/X1_wine.npy')
     
-
+    # if num_partial is given, we take num_partial of 0 and 1 samples and test using those instead of whole dataset
     if num_partial > 0:
         X0_len = X0.shape[0]
         X1_len = X1.shape[0]

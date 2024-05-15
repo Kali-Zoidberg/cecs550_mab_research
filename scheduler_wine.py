@@ -18,7 +18,8 @@ else: #Preprocess data by invoking the corresponding real_preprocess script for 
     os.system("python ./real_preprocess/wine_preprocess.py")
 
 """
-Train AutoEncoder Using predetermined seeds and then call real_main to run the CMAB Algorithms
+Experiment begins here.
+For each seed in the seed list, we train a new AutoEncoder to encode the dataset then call real_main to run the CMAB Algorithms
 """
 for seed in seed_list:
     if os.path.exists('./real_models/AE_wine_s{}.pt'.format(seed)):
@@ -34,6 +35,7 @@ for seed in seed_list:
     os.system('python ./real_main.py'+ base_arg + condition_arg)
 
 """
+Experiments are complete by this line.
 Finally, plot the values.
 """
 real_plotting.plotting(resultfoldertail='_ctr_wine_{}'.format(now), env='wine', plotting_dict=plotting_dict, fnametail='_{}_all'.format(now))

@@ -46,7 +46,7 @@ class base_Env:
                 self.d \
             = load_ftn(model_tail=args.model_tail, num_partial=args.num_partial, device=self.device)
 
-        # self.p is the masking ratio to make some features missing for each sample
+        # self.p is the masking ratio to make some features missing for each sample, used in masking() at the bottom
         self.p = 1.0 - args.mask_ratio
 
         # self.K is the number of arms for the MAB. K_max is unused throughout all programs

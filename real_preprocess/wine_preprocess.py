@@ -13,20 +13,22 @@ dataset = fetch_ucirepo(id=186)
 
 data = pd.concat((dataset.data.features, dataset.data.targets), axis=1)
 
-#for each sample, we set reward to 0 if quality <= 5, otherwise 1
-#We will drop the quality attribute so Bandit doesn't know about it, can only see reward.
+'''
+For each sample, we set reward to 0 if quality <=7, otherwise 1
+We will drop the quality attribute so Bandit doesn't know about it, can only see reward.
+'''
 data["reward"] = np.where(data["quality"] <= 7, 0, 1)
 data.pop("quality")
 data = data.reset_index(drop=True)
 data_array = data.to_numpy()
 
-#get the rewards as a separate vector
-#dataframe is 11 attributes then the reward, so get idx 11
+'''
+Get the rewards as a separate vector
+dataframe is 11 attributes then the reward, so get idx 11
+'''
 Y = data_array[:, 11]
 
 X = []
-# u.data contains the user id and movie id for each review;
-# they concatenated the user and movie info for each review here
 print(data_array.shape)
 for i in range(data_array.shape[0]):
     X.append(data_array[i])
