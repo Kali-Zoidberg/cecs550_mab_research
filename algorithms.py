@@ -6,7 +6,7 @@ from numpy.random import seed
 from numpy.random import rand
 from numba import jit, prange
 
-@jit(nopython=True)
+@jit(nopython=True) #nopython sets it to C-level objects for faster performance
 def numba_ix(arr, rows, cols):
     """
     Numba compatible implementation of arr[np.ix_(rows, cols)] for 2D arrays.
@@ -42,9 +42,11 @@ def _CLBEF_get_UCB(x_hat, t, K, theta_hat, d, T, V_inv, p_hat, x_sum):
 def _CLBEF_UCB(x_hat, t, K, theta_hat, d, T, V_inv,p_hat, x_sum):
     
     ucb_list = np.zeros(K)
+    #For each arm, calculate the UCB and choose the arm with the highest ucb
     for k in prange(K):
         ucb_list[k] = _CLBEF_get_UCB(x_hat[k], t, K, theta_hat.copy(), d, T, V_inv.copy(), p_hat, x_sum)
-        
+
+    #Arm w/ highest UCB score is chosen
     chosen_arm = np.argmax(ucb_list)
     max_ucb = ucb_list[chosen_arm]
 
@@ -126,7 +128,7 @@ class CLBBF:
         self.x_sum=0
         
     def run(self):
-        
+        #Actual Algorithm for CLBBF
         for t in tqdm(range(self.T)):
 
             self.Env.load_data()
@@ -165,8 +167,10 @@ class CLBBF:
                 self.V_inv = np.linalg.pinv(self.V)
                 
                 self.theta_hat = self.V_inv @ self.xy.T
+
+                #Get best arm
                 chosen_arm, max_ucb = _CLBEF_UCB(self.x_hat, t, self.K, self.theta_hat, self.d, self.T, self.V_inv, self.p_hat, self.x_sum)
-                    
+            #set reward for the current timestamp for the chosen arm
             self.r_Exp[t], self.r[t] = self.Env.observe(chosen_arm)
             self.x_his.append(x_t[chosen_arm])
             self.m_his.append(m_t[chosen_arm])
@@ -200,7 +204,8 @@ def _OFUL_UCB(x_hat, t, K, theta_hat, d, T, V_inv):
     ucb_list = np.zeros(K)
     for k in prange(K):
         ucb_list[k] = _OFUL_get_UCB(x_hat[k], t, K, theta_hat.copy(), d, T, V_inv.copy())
-        
+
+    #Choose best arm based on ucb
     chosen_arm = np.argmax(ucb_list)
     max_ucb = ucb_list[chosen_arm]
 
@@ -228,7 +233,10 @@ class OFUL:
         self.run()
 
     def run(self):
-        
+        """
+        Runs the OFUL algorithm for self.T steps
+        :return:
+        """
         for t in tqdm(range(self.T)):
 
             self.Env.load_data()
@@ -253,6 +261,9 @@ class OFUL:
 ######################################################################################
     
 class RandomPolicy:
+    """
+    Random policy is just for choosing arms at random to test against randomness
+    """
     def __init__(self,T,Env):
         print('Algorithm: Random Policy')
         self.Env = Env

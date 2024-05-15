@@ -25,9 +25,8 @@ if __name__ == "__main__":
 
     X = np.vstack([np.load(dataset_path/'preprocess/X0_wine.npy'),np.load(dataset_path/'preprocess/X1_wine.npy')])
     np.random.shuffle(X)
-
-    #skipping AutoEncoder for now
-    model = utils.AE_train(X, emb_dim=NUM_EMB_DIM, seed=seed) #set to 10, see what happens
+    #Train and save model using specified num dimensions
+    model = utils.AE_train(X, emb_dim=NUM_EMB_DIM, seed=seed)
     model_path = Path('./real_models/')
     makedirs(model_path, exist_ok=True)
     torch.save(model.state_dict(), model_path/f'AE_wine_s{seed}.pt')

@@ -10,7 +10,7 @@ def parse_args(parser):
     parser.add_argument("--seed", type=int)
 
     parser.add_argument("--mask_ratio", "--np", type=float, help='1-p ; mask probabilty')
-    parser.add_argument("--K", type=int)
+    parser.add_argument("--K", type=int) #controls number of arms
     parser.add_argument("--reward1_ratio", type=float, help='The ratio of reward 1 arms from the sampling')
     parser.add_argument("--num_partial", type=int, help='Whole dataset is sampled from the loaded data, with given num')
     parser.add_argument("--model_tail", type=str, help="Indicating the model tail, e.g. '_avazu_12345")

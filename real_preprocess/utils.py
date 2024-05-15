@@ -41,6 +41,7 @@ class Autoencoder_BN(nn.Module):
 
 def AE_train(X, emb_dim = EMB_DIM, seed = 0):
 
+    #Set all possible areas of randomness to the specified seed
     print('Random Seed: ',seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -58,7 +59,7 @@ def AE_train(X, emb_dim = EMB_DIM, seed = 0):
     L = X.shape[0]
 
     loss_arr = []
-
+    #TRaining loop
     for k in tqdm(range(num_epoch)):
         
         for l in range(L//B):

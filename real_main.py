@@ -10,6 +10,9 @@ import algorithms
 import utils
 import os
 
+"""
+Define the Environment classes passed into the training algorithms
+"""
 ENV_CLASS = {
     'ml100k':     real_environments.env_ml100k.ml100k_Env,
     'wine':       real_environments.env_wine.wine_Env
@@ -48,12 +51,15 @@ if __name__ == "__main__":
     os.makedirs(f'./real_outputs/result{resultfoldertail}/configs', exist_ok=True) 
 
     timenum = round(time.time() * 1000)
+    #Print out command line arguments
     arg_str = "".join('{}: {} | '.format(str(key),str(value)) for key, value in args.__dict__.items())
-
+        #Save results in numpy format for this run
     np.savez(f'./real_outputs/result{resultfoldertail}/arrays/{args.env}_{timenum}_reward', clbbf=CLBBF_rewards, oful=OFUL_rewards,random=RANDOM_rewards)
-    
+
+    #Output the command line arguments to a pickle file
     with open(f'./real_outputs/result{resultfoldertail}/configs/{args.env}_{timenum}.pickle', 'wb') as handle:
         pickle.dump(args.__dict__, handle, protocol=pickle.HIGHEST_PROTOCOL)
-    
+
+    #Output the command line arguments
     with open(f"./real_outputs/result{resultfoldertail}/{args.env}_result_guide","a+") as f:
         f.write('{}: {}'.format(timenum, arg_str))

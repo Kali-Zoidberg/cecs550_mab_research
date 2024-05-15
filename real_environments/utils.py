@@ -11,6 +11,7 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 
 class Autoencoder_BN(nn.Module):
+
     def __init__(self, raw_dim, emb_dim):
         super().__init__()
         self.raw_dim = raw_dim
@@ -78,20 +79,20 @@ class base_Env:
         return x
 
     def load_data(self):
-
+        #Data is split into two datasets, one with resulting reward 0 and the other with resulting reward 1
         reward0_idxs = np.random.choice(np.arange(self.N0), self.n0, replace=False)
         reward1_idxs = np.random.choice(np.arange(self.N1), self.n1, replace=False)
 
+        #Stack it for training
         self.x = np.vstack([self.X0[reward0_idxs].copy(), self.X1[reward1_idxs].copy()])
+        #Create K arms
         self.arms = np.arange(self.K)
         # Env.x is the masked samples, Env.m is the mask
         self.x, self.m = masking(self.p, len(self.arms), self.x)
 
-    def write_used_idx(self):
-        pass
 
     def observe(self, k):
-
+        #Observe selected arm and determine if it meets the rewrad threshold.
         if self.arms[k] >= self.n0:
             exp_reward = 1
         else:
